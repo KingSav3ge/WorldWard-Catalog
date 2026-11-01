@@ -1,0 +1,78 @@
+{
+  "schema": "worldward-proposed-rise-expansion-profile-2",
+  "id": "fictional-reed-building-allowance-v2",
+  "status": "proposed-unselected",
+  "classification": "original-fictional-demonstration",
+  "runtime_adoption": false,
+  "scope": "Synthetic Reed Camp at fictional Greywater Reach; not a historical rule or universal Rise profile.",
+  "values": {
+    "initial_allowance": 2,
+    "increment_on_accepted_grant": 1,
+    "initial_completed_buildings": 0,
+    "synthetic_timber_per_project": 3,
+    "synthetic_initial_timber": 9,
+    "request_fee": 0,
+    "request_elapsed_seconds": 0
+  },
+  "counting": {
+    "unit": "One permanent building or one distinct committed new-building project at this settlement, counted once.",
+    "includes": [
+      "completed buildings",
+      "admitted new-building projects whether active or paused",
+      "cancelled projects with retained physical works"
+    ],
+    "excludes": [
+      "ordinary repairs to the same building",
+      "uncommitted plans"
+    ],
+    "completion": "Atomically replace the completed project's reservation with its building; total usage does not change.",
+    "last_slot": "At most one of two competing projects can be admitted into the last available place. Both may be deferred by conflict handling; no priority or immediate winner is specified. A later separately authorized attempt must revalidate the current state.",
+    "cancellation": "Before work, cancellation releases the place reservation and any outstanding unconsumed material reservation; stock is not credited because reserved material was never transferred. After work begins, the fictional proposal retains the place and physical works; release of any active material reservation follows the pending Engine work contract. There is no automatic refund.",
+    "project_identity": "A new distinct admitted project and its completed asset require separate stable identity and lineage. Completion converts its place reservation into exactly one building with valid project and material-flow provenance. The current Engine only has the hard-coded shelter project; general distinct identities are not yet implemented.",
+    "opening_basis": "Initial completed buildings are zero. A fixture needing one building must use an explicitly authored player-controlled prelude to complete a Core-valid project with its material flow before the evaluated actions. This is a proposed setup, not an existing-save migration or evidence that multiple projects are supported."
+  },
+  "authority": {
+    "issuer": "fictional-reed-commons-council (proposed; not the existing R00 steward)",
+    "jurisdiction": "fictional-reed-camp-only",
+    "prerequisites": [
+      "issuer is active and authorized for this settlement",
+      "request is within this fictional jurisdiction",
+      "the recorded site review permits one further building place"
+    ],
+    "decision": "If a verified issuer/site prerequisite or eligible site review is absent, record refusal; otherwise the issuer may offer one additional place under this proposed authored procedure. Request or offer alone changes no allowance.",
+    "terms": "No fee, resource transfer, new land right, automatic approval, obligation or extra labor is implied. The founder must separately accept the still-valid offer; an effective grant changes the allowance at most once.",
+    "validity": "A wrong-site, expired or revoked authority cannot create a valid offer or grant. Later changes do not erase existing buildings or receipts.",
+    "review_reuse": "Proposed single-use rule: a favorable recorded review is bound to one issuer, site and review identity. It can support at most one live offer and one effective grant. Effective acceptance consumes its eligibility atomically; declined, expired or revoked offers require a newly recorded favorable review before another offer. A retry returns the original receipt. No expiry duration, reviewer procedure or renewal schedule is selected.",
+    "record_requirements": "Engine must define Core-owned authority, jurisdiction, recorded site review, scoped decision, offer/acceptance/expiry and effective grant records plus actor-safe receipts. The proposed council is not an existing R00 actor or authority; a claimant cannot gain jurisdiction by requesting it."
+  },
+  "state_and_recovery": {
+    "owner": "Existing authoritative Core and applicable rights/work records; this document does not create a second state owner.",
+    "revalidation": "At commit recheck issuer, site, current permission, allowance, physical fit and relevant resources.",
+    "failure": "A rejected build or grant changes no materials, commitments, allowance or elapsed work.",
+    "retry": "A repeated committed request returns its original actor-scoped result, without a second effect; restore fencing follows the Engine's eventual published contract.",
+    "migration": "Existing saves must not receive an inferred allowance or silent rewrite; Engine must define an explicit migration and compatibility policy."
+  },
+  "coordination": {
+    "engine": "Engine review ecca8094a2d2cdb8a11e018a085487288b26e88d: future distinct projects/assets, provenance, authority/review/offer/grant records, concurrency resolution and migration contracts are prerequisites; no adoption claimed.",
+    "app": "App must consume only a reviewed, explicitly selected Engine/Catalog set; this proposal is not a launch or display authorization.",
+    "catalog": "Catalog owns the fictional proposal and independent expectations; evaluator truth is not actor input."
+  },
+  "supersedes_for_review": "fictional-reed-building-allowance-v1 at Catalog 92998f768e699496711f9ec2238584216655f6b2; v1 remains historical and unselected",
+  "material_accounting": {
+    "basis": "Three synthetic prepared timber bundles per new project and nine opening bundles are example profile values; current R00 uses three per shelter and nine for its stocked setup. This proposal is not selected for an existing campaign.",
+    "admission": "Admission reserves available, unconsumed timber for active work; reservation is not a physical transfer or debit.",
+    "pause": "Pausing retains the distinct building-place reservation but releases the active unconsumed material reservation. A resume rechecks material availability and any required authority.",
+    "completion": "Consume timber once only when completion commits, with valid material-flow lineage. Convert place reservation to completed asset without double counting.",
+    "cancellation": "Release any outstanding material reservation without crediting stock. Already consumed or physically transferred material may not be credited a second time; subsequent disposition requires a separate reviewed contract.",
+    "dependencies": "The distinct building-place reservation and cancellation procedure are proposed; their Engine data and atomic transitions are not yet published."
+  },
+  "unresolved_choices": {
+    "identity": "Engine must specify distinct project and asset identities, completion lineage and validation before execution.",
+    "authority": "Engine and Catalog must agree whether and how a fictional council relates to the existing steward, founding grant and actor knowledge; no automatic conversion is assumed.",
+    "review": "Engine must review single-use review/offer/grant binding, cancellation, revocation, expiry events and renewal; no duration or automatic renewal is chosen.",
+    "concurrency": "Host serialization or the later authorized resolution after R9 deferral must be specified; this proposal gives no winner or priority policy.",
+    "resources": "Engine must specify place and material reservation representation, atomic completion and cancellation; paused unconsumed materials are free in the inspected R00.",
+    "migration": "Engine must define saved-state compatibility and an explicit migration; no opening asset or cap may be silently injected.",
+    "disposition": "Treatment of cancelled post-work physical remains and release of a place require a separately reviewed contract."
+  }
+}

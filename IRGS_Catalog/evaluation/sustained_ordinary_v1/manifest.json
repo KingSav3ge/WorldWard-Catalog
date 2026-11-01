@@ -32,8 +32,16 @@
   "execution_scope": "Normal reviewed creation and actor-facing intents over actual local HTTP; three separate server processes per journey. Evaluator reads synthetic saves but never changes their state.",
   "gate_policy": "Retain ALPHA_4_0_PLAN.md A4-G10 and all seven acceptance journeys, alongside ALPHA_4_0_ACCEPTANCE.json A4-G10 at joined 3f174ffad14e2219c483dd5366bb56254e08a401. Record concrete continuing-recovery/agency/risk gaps under their own gates; do not make the unselected allowance/council a release minimum. --require-g10 remains held.",
   "files_sha256": {
-    "README.md": "23842da8e23cb14b4453a6b6b3767c423b6338c971d8669045f5c3f9360d6ae1",
+    "README.md": "c5a39d68e41fb58481b4c9f84a1c8e89d031ed308ce932c7dd77448baab1cc9f",
     "actor_inputs/cases.json": "5505ab2d99964ef117f5006b2e618dd7ef44e2e0f735c88c59457c19859b9aea",
     "evaluator_only/expectations.json": "42fde6e23f59fba7c97d7bb2649f7b3809102e8b81f604f8b3230826898f7a6f"
+  },
+  "source_admission": {
+    "default_mode": "historical-baseline-override",
+    "compatible_mode": "All three full immutable SHAs supplied at invocation; exact clean roots; actual App Engine/Catalog commit gitlinks must match. No overrides.",
+    "actual_execution_identity": "Written to external evidence only; the authored selection above is provenance, not a claim of final-source compatibility.",
+    "import_roots": "Checked and recorded for server and evaluator modules; no PYTHONPATH replacement.",
+    "original_failed_consumer": "932bf5007386c8d5fe67cf6f7bb1ab3356025153",
+    "timing_correction_preserved": "e94a91a941b43f33ea02881af87261b13211d42f"
   }
 }

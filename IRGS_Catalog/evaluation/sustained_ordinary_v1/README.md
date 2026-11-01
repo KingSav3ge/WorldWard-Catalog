@@ -1,6 +1,6 @@
 # Independent sustained ordinary journeys v1
 
-This is an executable Catalog consumer candidate against Engine ecca8094a2d2cdb8a11e018a085487288b26e88d and App c04ba5524ae95316c7e826fc63085a4916d7dd67. App actually pins that Engine and Catalog a18cb48928da25d40d057a182c69f71ef149ce80. The containing Catalog review commit is an explicit test override. Existing consumers, fixture IDs, source guards, historical archives, response libraries and expansion proposals are preserved.
+The authored historical baseline is Engine ecca8094a2d2cdb8a11e018a085487288b26e88d and App c04ba5524ae95316c7e826fc63085a4916d7dd67, whose committed Catalog pin is a18cb48928da25d40d057a182c69f71ef149ce80. Historical mode explicitly overrides Catalog with the containing review commit. Compatible mode instead tests three externally supplied full immutable SHAs and requires App's committed Engine/Catalog gitlinks to match the actual tested checkouts. Authored provenance and actual execution identities are reported separately. Existing fixtures, guards, archives, libraries and proposal history are preserved.
 
 Correction after coordinator run of Catalog 932bf5007386c8d5fe67cf6f7bb1ab3356025153: that exact source returned exit 1 with two tests run, quay passing and Rise erroring on an assumed result elapsed_time field. Coordinator diagnostic evidence showed successful Core advances, including 6600 to 10200 seconds, while the shared settlement result correctly retained null. The original failed source and its coordinator artifacts remain historical evidence; this correction has not itself been executed here.
 
@@ -24,3 +24,17 @@ Coordinator execution requires a clean isolated Catalog checkout at the exact re
 The first command should report two passing bounded consumers and return 2 for held G10. Its JSON separates runtime results, tested source and required open criteria. In-memory fixture checks are not Python or gameplay execution. No execution is claimed by this README; fresh coordinator evidence must name the exact candidate. Main, version, App pins and the tested expansion review branch are not adopted here.
 
 Timing checks use evaluator-only before/after Core snapshots and the selected settlement model, never a fabricated public span. The public receipt elapsed_time remains null where the shared settlement adapter supplies no span. Zero-effect and rejected actions, actual positive waits, each provision threshold, debit/flow conservation and unchanged civil-calendar precision are asserted. The report labels evaluator timing separately. Further post-restore quay inspection spends its selected 20 seconds in addition to the pre-restore journey total; Rise inspection spends no elapsed work.
+
+## Exact source admission at convergence
+
+The original invocation remains historical-baseline-override mode by default. Explicit --engine-commit or --app-commit values in that mode may only repeat the original baseline. No moving refs or inferred main selections are accepted.
+
+For the coordinator's final compatible run, supply every immutable SHA explicitly:
+
+    python -B tools/tests/test_sustained_ordinary_consumers.py --selection-mode compatible --engine-source "$engine_checkout" --engine-commit "$selected_engine_sha" --app-source "$app_checkout" --app-commit "$selected_app_sha" --catalog-commit "$catalog_convergence_sha" --output /tmp/worldward-compatible-g10.json --require-g10
+
+All three checkouts must be exact and clean. Both App entries must be commit gitlinks matching the tested Engine and Catalog. This mode permits no dependency override. Server-process and evaluator module roots are checked and recorded, without PYTHONPATH replacement. Missing full SHAs or mismatched pins fail admission before a server starts. As a negative check, compatible mode with the historical App and a newer Catalog must reject that Catalog pin mismatch; this intentional rejection is separate from a gameplay failure.
+
+Fixture hashes bind authored inputs, expected truth and this README. They do not embed a future App commit or the containing Catalog's own SHA. Actual requested/verified commits, gitlinks, paths, mode and admission result are written only to evidence outside the source checkout, avoiding circular source hashes. The original failed 932bf500 and fixed e94a91a commits remain in history; their results must not be attributed to this changed runner.
+
+No stricter gate is silently passed by a matching source set. Source admission, bounded runtime success and G10/Alpha qualification remain separate outcomes.

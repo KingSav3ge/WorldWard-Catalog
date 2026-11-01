@@ -1,0 +1,56 @@
+{
+  "schema": "worldward-proposed-rise-expansion-profile-1",
+  "id": "fictional-reed-building-allowance-v1",
+  "status": "proposed-unselected",
+  "classification": "original-fictional-demonstration",
+  "runtime_adoption": false,
+  "scope": "Synthetic Reed Camp at fictional Greywater Reach; not a historical rule or universal Rise profile.",
+  "values": {
+    "initial_allowance": 2,
+    "increment_on_accepted_grant": 1,
+    "initial_completed_buildings": 1,
+    "synthetic_timber_per_project": 2,
+    "synthetic_initial_timber": 6,
+    "request_fee": 0,
+    "request_elapsed_seconds": 0
+  },
+  "counting": {
+    "unit": "One permanent building or one distinct committed new-building project at this settlement, counted once.",
+    "includes": [
+      "completed buildings",
+      "admitted new-building projects whether active or paused",
+      "cancelled projects with retained physical works"
+    ],
+    "excludes": [
+      "ordinary repairs to the same building",
+      "uncommitted plans"
+    ],
+    "completion": "Atomically replace the completed project's reservation with its building; total usage does not change.",
+    "last_slot": "Admission and reservation are atomic across actors and retries; at most one competing project obtains the last slot.",
+    "cancellation": "Before work, an explicitly accepted cancellation releases the reservation and returns the two unspent project timber atomically. After work begins, cancellation retains the occupied place and physical works; disposition requires a separate reviewed contract."
+  },
+  "authority": {
+    "issuer": "fictional-reed-commons-council",
+    "jurisdiction": "fictional-reed-camp-only",
+    "prerequisites": [
+      "issuer is active and authorized for this settlement",
+      "request is within this fictional jurisdiction",
+      "the recorded site review permits one further building place"
+    ],
+    "decision": "If any prerequisite fails, record a refusal; otherwise issue an offer of exactly one additional place. A request or offer alone changes no allowance.",
+    "terms": "No fee, resource transfer, new land right, automatic approval, obligation or extra labor is implied. The founder must separately accept the unexpired offer; the effective grant changes the allowance exactly once.",
+    "validity": "A wrong-site, expired or revoked authority cannot create a valid offer or grant. Later changes do not erase existing buildings or receipts."
+  },
+  "state_and_recovery": {
+    "owner": "Existing authoritative Core and applicable rights/work records; this document does not create a second state owner.",
+    "revalidation": "At commit recheck issuer, site, current permission, allowance, physical fit and relevant resources.",
+    "failure": "A rejected build or grant changes no materials, commitments, allowance or elapsed work.",
+    "retry": "A repeated committed request returns its original actor-scoped result, without a second effect; restore fencing follows the Engine's eventual published contract.",
+    "migration": "Existing saves must not receive an inferred allowance or silent rewrite; Engine must define an explicit migration and compatibility policy."
+  },
+  "coordination": {
+    "engine": "Engine must review the terms and publish its state, API, actor-scoped receipt, durability and migration contracts before executable consumers.",
+    "app": "App must consume only a reviewed, explicitly selected Engine/Catalog set; this proposal is not a launch or display authorization.",
+    "catalog": "Catalog owns the fictional proposal and independent expectations; evaluator truth is not actor input."
+  }
+}

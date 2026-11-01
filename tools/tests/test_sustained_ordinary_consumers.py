@@ -38,11 +38,15 @@ app, engine, catalog, folder, ready = map(Path, sys.argv[1:])
 os.environ['IRGS_ENGINE_ROOT'] = str(engine / 'IRGS_3_3')
 os.environ['IRGS_CATALOG_ROOT'] = str(catalog / 'IRGS_Catalog')
 sys.path[:0] = [str(app / 'IRGS_Web'), str(engine / 'IRGS_3_3/runtime')]
-for name, source in [('server', app), ('core_world', engine), ('solo_provider', engine),
-                     ('openai_proposals', engine)]:
+imported = {}
+for name, source in [('server', app), ('intent_bridge', app), ('rise_campaigns', app),
+                     ('core_world', engine), ('solo_provider', engine), ('openai_proposals', engine),
+                     ('offline_responses', engine), ('shared_runtime', engine), ('supported_intent', engine),
+                     ('settlement_runtime', engine), ('scene_actions', engine), ('starting_selection', engine)]:
     module = importlib.import_module(name)
     if not Path(module.__file__).resolve().is_relative_to(source.resolve()):
         raise RuntimeError('Wrong imported consumer source: ' + name)
+    imported[name] = str(Path(module.__file__).resolve())
 counter = folder / 'blocked-provider-calls.json'
 if not counter.exists():
     counter.write_text('0')
@@ -60,7 +64,7 @@ with patch('solo_provider.CapabilityBroker.dispatch', side_effect=blocked), \
     from server import make_server
     server = make_server(0, folder / 'saves', reference_config=folder / 'absent-reference.json',
         reference_cache=folder / 'cache', solo_configuration=None)
-    ready.write_text(json.dumps({'port': server.server_port}))
+    ready.write_text(json.dumps({'port': server.server_port, 'imported_modules': imported}))
     try:
         server.serve_forever()
     finally:
@@ -74,38 +78,66 @@ def git(root, *args):
 
 def source_binding():
     global SOURCE_SELECTION
+    mode = os.environ.get('IRGS_SUSTAINED_SELECTION_MODE', 'historical-baseline-override')
+    if mode not in ('historical-baseline-override', 'compatible'):
+        raise RuntimeError('Choose an explicit supported source selection mode')
+    supplied_engine = os.environ.get('IRGS_SUSTAINED_ENGINE_COMMIT')
+    supplied_app = os.environ.get('IRGS_SUSTAINED_APP_COMMIT')
+    if mode == 'historical-baseline-override':
+        if supplied_engine not in (None, ENGINE_SHA) or supplied_app not in (None, APP_SHA):
+            raise RuntimeError('Historical mode requires its original immutable Engine/App selection')
+        engine_commit, app_commit = ENGINE_SHA, APP_SHA
+    else:
+        engine_commit, app_commit = supplied_engine, supplied_app
     sources = {}
-    for label, variable, sha in (
-            ('engine', 'IRGS_SUSTAINED_ENGINE_SOURCE', ENGINE_SHA),
-            ('app', 'IRGS_SUSTAINED_APP_SOURCE', APP_SHA),
-            ('catalog', 'IRGS_SUSTAINED_CATALOG_SOURCE', os.environ.get('IRGS_SUSTAINED_CATALOG_COMMIT'))):
-        path = os.environ.get(variable)
+    requested = {'engine': engine_commit, 'app': app_commit,
+                 'catalog': os.environ.get('IRGS_SUSTAINED_CATALOG_COMMIT')}
+    for label, variable in (
+            ('engine', 'IRGS_SUSTAINED_ENGINE_SOURCE'),
+            ('app', 'IRGS_SUSTAINED_APP_SOURCE'),
+            ('catalog', 'IRGS_SUSTAINED_CATALOG_SOURCE')):
+        path, sha = os.environ.get(variable), requested[label]
         if not path or not sha or not re.fullmatch(r'[0-9a-f]{40}', sha):
-            raise RuntimeError('Exact source path and commit are required for ' + label)
+            raise RuntimeError('Full immutable source commit and exact path are required for ' + label)
         root = Path(path).resolve()
         if label == 'catalog' and root != ROOT:
             raise RuntimeError('Run the consumer from the selected Catalog checkout')
         if git(root, 'rev-parse', 'HEAD') != sha or git(root, 'status', '--porcelain'):
             raise RuntimeError('Source must be exact and clean: ' + label)
         sources[label] = root
-    for name, expected in (('Engine', ENGINE_SHA), ('Catalog', CATALOG_BASE)):
-        if git(sources['app'], 'rev-parse', 'HEAD:' + name) != expected:
-            raise RuntimeError('Unexpected App committed gitlink: ' + name)
+    app_pins = {}
+    for name in ('Engine', 'Catalog'):
+        entry = git(sources['app'], 'ls-tree', 'HEAD', name).split()
+        if len(entry) != 4 or entry[0] != '160000' or entry[1] != 'commit' or entry[3] != name:
+            raise RuntimeError('App dependency is not a committed gitlink: ' + name)
+        app_pins[name] = entry[2]
+    SOURCE_SELECTION = {'mode': mode, **requested, 'catalog_base': CATALOG_BASE,
+        'authored_baseline': {'engine': ENGINE_SHA, 'app': APP_SHA, 'catalog': CATALOG_BASE},
+        'source_roots': {name: str(path) for name, path in sources.items()},
+        'app_engine_pin': app_pins['Engine'], 'app_catalog_pin': app_pins['Catalog'],
+        'engine_override': app_pins['Engine'] != engine_commit,
+        'catalog_override': app_pins['Catalog'] != requested['catalog'],
+        'admission': 'not_accepted'}
+    expected_pins = ({'Engine': engine_commit, 'Catalog': requested['catalog']} if mode == 'compatible'
+                     else {'Engine': ENGINE_SHA, 'Catalog': CATALOG_BASE})
+    for name, expected in expected_pins.items():
+        if app_pins[name] != expected:
+            raise RuntimeError(mode + ' pin mismatch for App ' + name +
+                               ': committed ' + app_pins[name] + '; required ' + expected)
     manifest = json.loads((FIXTURE / 'manifest.json').read_text(encoding='utf-8'))
-    selected = manifest['selection']
-    if (selected['engine'], selected['app'], selected['catalog_base'],
-            selected['app_engine_pin'], selected['app_catalog_pin']) != (
+    authored = manifest['selection']
+    if (authored['engine'], authored['app'], authored['catalog_base'],
+            authored['app_engine_pin'], authored['app_catalog_pin']) != (
             ENGINE_SHA, APP_SHA, CATALOG_BASE, ENGINE_SHA, CATALOG_BASE):
-        raise RuntimeError('Wrong sustained-journey selection')
+        raise RuntimeError('Wrong authored baseline provenance')
     if set(manifest['files_sha256']) != {'actor_inputs/cases.json', 'evaluator_only/expectations.json', 'README.md'}:
         raise RuntimeError('Incomplete fixture binding')
     for path, expected in manifest['files_sha256'].items():
         if hashlib.sha256((FIXTURE / path).read_bytes()).hexdigest() != expected:
             raise RuntimeError('Changed selected fixture: ' + path)
-    SOURCE_SELECTION = {'engine': ENGINE_SHA, 'app': APP_SHA,
-        'catalog': git(ROOT, 'rev-parse', 'HEAD'), 'catalog_base': CATALOG_BASE,
-        'app_engine_pin': ENGINE_SHA, 'app_catalog_pin': CATALOG_BASE,
-        'engine_override': False, 'catalog_override': True}
+    SOURCE_SELECTION['admission'] = 'accepted_exact_sources'
+    SOURCE_SELECTION['committed_pins_match_tested_sources'] = (
+        app_pins['Engine'] == engine_commit and app_pins['Catalog'] == requested['catalog'])
     return sources
 
 
@@ -121,11 +153,13 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         os.environ['IRGS_CATALOG_ROOT'] = str(ROOT / 'IRGS_Catalog')
         engine = cls.sources['engine'] / 'IRGS_3_3/runtime'
         sys.path.insert(0, str(engine))
+        cls.evaluator_imports = {}
         for name in ('core_world', 'offline_responses'):
             module = importlib.import_module(name)
             if not Path(module.__file__).resolve().is_relative_to(engine):
                 raise RuntimeError('Wrong evaluator import; use a fresh Python process')
             setattr(cls, name, module)
+            cls.evaluator_imports[name] = str(Path(module.__file__).resolve())
 
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix='worldward-sustained-ordinary-')
@@ -136,6 +170,7 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.log = None
         self.results = []
         self.evaluator_time_trace = []
+        self.session_imports = []
         self.addCleanup(self.stop)
         self.start()
 
@@ -153,7 +188,13 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
                 detail = (self.folder / ('session-' + str(self.session) + '.log')).read_text(errors='replace')[-2000:]
                 raise RuntimeError('Synthetic App host did not become ready: ' + detail)
             time.sleep(0.05)
-        self.url = 'http://127.0.0.1:' + str(json.loads(ready.read_text())['port'])
+        metadata = json.loads(ready.read_text())
+        for name, path in metadata['imported_modules'].items():
+            source = self.sources['app'] if name in ('server', 'intent_bridge', 'rise_campaigns') else self.sources['engine']
+            self.assertTrue(Path(path).resolve().is_relative_to(source))
+        self.session_imports.append({'session': self.session, 'pid': self.child.pid,
+                                     'modules': metadata['imported_modules']})
+        self.url = 'http://127.0.0.1:' + str(metadata['port'])
         self.token = ''
         self.token = self.ok('/api/campaigns')['token']
         self.assertEqual(int((self.folder / 'blocked-provider-calls.json').read_text()), 0)
@@ -292,9 +333,16 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         if rejected:
             self.assertEqual(delta, 0)
         elif before['binding']['campaign_profile'] == 'rise':
-            # The inspected shared settlement adapter supplies no action span.
-            # Null is retained; it does not imply that the Core advanced by zero.
-            self.assertIsNone(public['elapsed_time'])
+            # The authored baseline supplies no span. Preserve null; validate
+            # an explicit compatible-source span only when one is actually present.
+            if SOURCE_SELECTION['mode'] == 'historical-baseline-override':
+                self.assertIsNone(public['elapsed_time'])
+            elif public['elapsed_time'] is not None:
+                packet = public['elapsed_time']
+                self.assertEqual(packet['axis'], left['axis'])
+                self.assertEqual(packet['before_seconds'], left['seconds'])
+                self.assertEqual(packet['after_seconds'], right['seconds'])
+                self.assertEqual(packet['seconds'], delta)
             if action['action'] == 'wait_hour':
                 model = before['settlement_model']
                 candidates = [left['seconds'] + 3600, before['provision']['next_at']]
@@ -390,6 +438,8 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
                 if name in self.inputs[context]},
             'final_received_action_ids': received_actions,
             'separate_server_processes': True, 'normal_reviewed_creation': True,
+            'server_module_paths_by_session': self.session_imports,
+            'evaluator_module_paths': self.evaluator_imports,
             'hidden_state_written_by_harness': False, 'provider_calls': provider_calls,
             'exact_original_retry': True, 'unaccepted_restore_fenced': True,
             'further_normal_play_after_restore': True,
@@ -576,6 +626,10 @@ def main():
     parser.add_argument('--engine-source', required=True)
     parser.add_argument('--app-source', required=True)
     parser.add_argument('--catalog-commit', required=True)
+    parser.add_argument('--selection-mode', choices=('historical-baseline-override', 'compatible'),
+                        default='historical-baseline-override')
+    parser.add_argument('--engine-commit', help='Required full immutable SHA in compatible mode')
+    parser.add_argument('--app-commit', help='Required full immutable SHA in compatible mode')
     parser.add_argument('--output', required=True)
     parser.add_argument('--require-g10', action='store_true', help='Return 2 if the G10 criteria remain open.')
     args = parser.parse_args()
@@ -586,12 +640,22 @@ def main():
     os.environ['IRGS_SUSTAINED_APP_SOURCE'] = args.app_source
     os.environ['IRGS_SUSTAINED_CATALOG_SOURCE'] = str(ROOT)
     os.environ['IRGS_SUSTAINED_CATALOG_COMMIT'] = args.catalog_commit
+    os.environ['IRGS_SUSTAINED_SELECTION_MODE'] = args.selection_mode
+    for variable, value in (('IRGS_SUSTAINED_ENGINE_COMMIT', args.engine_commit),
+                            ('IRGS_SUSTAINED_APP_COMMIT', args.app_commit)):
+        if value is None:
+            os.environ.pop(variable, None)
+        else:
+            os.environ[variable] = value
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(SustainedOrdinaryConsumers)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     oracle = json.loads((FIXTURE / 'evaluator_only/expectations.json').read_text(encoding='utf-8'))
     runtime_passed = (result.wasSuccessful() and result.testsRun == 2 and not result.skipped
                       and set(REPORTS) == {'rise', 'quay'})
-    gate_status = 'held' if runtime_passed else 'blocked_by_runtime_failure'
+    if SOURCE_SELECTION.get('admission') != 'accepted_exact_sources':
+        gate_status = 'blocked_by_source_admission'
+    else:
+        gate_status = 'held' if runtime_passed else 'blocked_by_runtime_failure'
     report = {'fixture_id': oracle['fixture_id'], 'source': SOURCE_SELECTION,
         'runtime_tests': {'run': result.testsRun, 'failures': len(result.failures),
                           'errors': len(result.errors), 'skipped': len(result.skipped),

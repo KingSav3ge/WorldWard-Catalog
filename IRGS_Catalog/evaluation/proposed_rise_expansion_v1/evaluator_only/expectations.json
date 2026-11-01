@@ -1,0 +1,77 @@
+{
+  "schema": "worldward-proposed-rise-expansion-evaluator-1",
+  "classification": "evaluator-only",
+  "marker": "PRIVATE_RISE_EXPANSION_ORACLE",
+  "profile_id": "fictional-reed-building-allowance-v1",
+  "fixtures": {
+    "limit": {
+      "setup": "one completed building; 6 timber; allowance 2",
+      "assertions": [
+        "A reserves the last place and commits 2 timber",
+        "B is rejected; no additional stock, commitment or elapsed work change"
+      ]
+    },
+    "concurrency": {
+      "setup": "one completed building; 6 timber; allowance 2; two same-revision attempts",
+      "assertions": [
+        "exactly one distinct project is admitted",
+        "usage is 2; exactly 2 timber committed; losing attempt has no effects"
+      ]
+    },
+    "pause-complete": {
+      "setup": "one completed building; 6 timber; allowance 2",
+      "assertions": [
+        "pause retains reservation",
+        "completion converts reservation to building once; usage remains 2"
+      ]
+    },
+    "cancel": {
+      "setup": "one completed building; 6 timber; allowance 2",
+      "assertions": [
+        "before-work cancellation releases reservation and returns 2 unspent timber once",
+        "replacement may reserve the freed place"
+      ]
+    },
+    "refusal": {
+      "setup": "valid council at this site; site review does not permit another place; initial allowance 2",
+      "assertions": [
+        "record refusal; allowance stays 2",
+        "request and refusal change no stock, commitments or elapsed work"
+      ]
+    },
+    "valid-expansion": {
+      "setup": "valid council at this site; favorable recorded site review; usage 2; allowance 2",
+      "assertions": [
+        "offer alone leaves allowance at 2",
+        "separate accepted valid offer raises allowance to 3 once",
+        "next feasible building may reserve the new place"
+      ]
+    },
+    "invalid-issuer": {
+      "setup": "claimant lacks jurisdiction for this site; allowance 2",
+      "assertions": [
+        "no valid offer or grant; allowance unchanged",
+        "no invented authority, stock transfer, time or commitment"
+      ]
+    },
+    "recovery": {
+      "setup": "valid favorable site review; initial allowance 2",
+      "assertions": [
+        "accepted expansion raises allowance to 3 once",
+        "same request returns original receipt after reload without another increase",
+        "restore boundary rejects stale original identity according to published Engine contract"
+      ]
+    },
+    "retained-works": {
+      "setup": "one completed building; 6 timber; allowance 2",
+      "assertions": [
+        "cancellation after work retains physical works and occupied place",
+        "new building is rejected until separate disposition is reviewed"
+      ]
+    }
+  },
+  "limitations": [
+    "Proposed expected behavior only; no Core execution, NPC behavior, permission, save migration or campaign availability is verified.",
+    "Setup values, refusal cause and site review are evaluator truth; they are not supplied as actor instructions."
+  ]
+}
