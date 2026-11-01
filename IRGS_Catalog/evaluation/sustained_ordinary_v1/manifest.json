@@ -1,0 +1,39 @@
+{
+  "fixture_id": "worldward-sustained-ordinary-v1",
+  "classification": "executable-independent-consumer",
+  "selection": {
+    "catalog_base": "a18cb48928da25d40d057a182c69f71ef149ce80",
+    "catalog_candidate": "command-line exact commit, required clean checkout",
+    "engine": "ecca8094a2d2cdb8a11e018a085487288b26e88d",
+    "app": "c04ba5524ae95316c7e826fc63085a4916d7dd67",
+    "app_engine_pin": "ecca8094a2d2cdb8a11e018a085487288b26e88d",
+    "app_catalog_pin": "a18cb48928da25d40d057a182c69f71ef149ce80",
+    "catalog_override": true,
+    "engine_override": false
+  },
+  "contexts": {
+    "rise": {
+      "campaign_profile": "rise",
+      "template_id": "R00",
+      "source": "IRGS_3_3/runtime/settlement_setup.py",
+      "genre_id": "settlement"
+    },
+    "quay": {
+      "campaign_profile": "military",
+      "scenario_id": "hundred-years-war",
+      "entry_id": "hyw-1415",
+      "starting_scenario_id": "individual",
+      "opening_id": "quay-contact-decision-v1",
+      "source": "IRGS_3_3/runtime/scene_setup.py",
+      "genre_id": "military",
+      "profile_manifest": "IRGS_3_3/data/catalog.json"
+    }
+  },
+  "execution_scope": "Normal reviewed creation and actor-facing intents over actual local HTTP; three separate server processes per journey. Evaluator reads synthetic saves but never changes their state.",
+  "gate_policy": "Preserve original A4-G10 acceptance. Passing bounded consumers are evidence only; independent sustained-depth qualification remains open. Related G04/G06/G07 gaps are recorded separately. --require-g10 returns held.",
+  "files_sha256": {
+    "README.md": "3080b178764df175fb68246a8a39f9ae72fa8994f53710f9656ddcbe37f78e13",
+    "actor_inputs/cases.json": "5505ab2d99964ef117f5006b2e618dd7ef44e2e0f735c88c59457c19859b9aea",
+    "evaluator_only/expectations.json": "b8ad2aedf3d6f27b852f6aaf136c5e55a989d2b577b185a43f064d04d6228f9a"
+  }
+}

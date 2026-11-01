@@ -1,0 +1,200 @@
+{
+  "fixture_id": "worldward-sustained-ordinary-v1",
+  "classification": "synthetic-player-instructions",
+  "rise": {
+    "profile_id": "rise",
+    "template_id": "R00",
+    "choices": {
+      "template_id": "R00",
+      "founder_name": "Synthetic G10 Founder",
+      "household_name": "Synthetic G10 Household",
+      "settlement_name": "Synthetic G10 Camp",
+      "region_name": "Greywater Reach",
+      "date_label": "Spring, Year 1",
+      "company": "solo",
+      "permission": "seek",
+      "supplies": "basic"
+    },
+    "sessions": [
+      [
+        {
+          "id": "accept-before-offer",
+          "action": "accept_grant",
+          "words": "I accept any limited founding terms I have received."
+        },
+        {
+          "id": "request-grant",
+          "action": "request_grant",
+          "words": "I ask Elin for permission to establish a camp."
+        },
+        {
+          "id": "accept-grant",
+          "action": "accept_grant",
+          "words": "I accept the limited founding terms."
+        },
+        {
+          "id": "walk-first",
+          "action": "walk_clearing",
+          "words": "I walk to the clearing."
+        },
+        {
+          "id": "found",
+          "action": "found",
+          "words": "I establish my camp here."
+        },
+        {
+          "id": "return-first",
+          "action": "walk_commons",
+          "words": "I return to the commons."
+        },
+        {
+          "id": "invite-early",
+          "action": "invite",
+          "words": "Would you move to our camp?"
+        }
+      ],
+      [
+        {
+          "id": "wait-repair",
+          "action": "wait_hour",
+          "words": "I wait until the next work boundary."
+        },
+        {
+          "id": "invite-later",
+          "action": "invite",
+          "words": "Would you move now?"
+        },
+        {
+          "id": "departure",
+          "action": "arrange_departure",
+          "words": "I arrange the agreed departure."
+        },
+        {
+          "id": "wait-arrival",
+          "action": "wait_hour",
+          "words": "I wait for the next boundary."
+        },
+        {
+          "id": "walk-back",
+          "action": "walk_clearing",
+          "words": "I return to my camp."
+        },
+        {
+          "id": "start-shelter",
+          "action": "build",
+          "words": "I begin building the shelter."
+        },
+        {
+          "id": "pause-shelter",
+          "action": "pause",
+          "words": "I pause my building work."
+        }
+      ],
+      [
+        {
+          "id": "resume-shelter",
+          "action": "resume",
+          "words": "I resume my shelter work."
+        },
+        {
+          "id": "finish-shelter",
+          "action": "wait_hour",
+          "words": "I wait until the next work boundary."
+        },
+        {
+          "id": "second-shelter",
+          "action": "build",
+          "words": "I try to begin a further shelter."
+        }
+      ]
+    ],
+    "continuation": {
+      "action": "wait_hour",
+      "words": "I wait to the next local boundary and inspect the received situation.",
+      "until_elapsed_seconds": 64800,
+      "maximum_requests": 24
+    },
+    "restore_probe": {
+      "id": "unaccepted-inspection",
+      "action": "inspect",
+      "words": "I inspect my local surroundings."
+    }
+  },
+  "quay": {
+    "profile_id": "military",
+    "scenario_id": "hundred-years-war",
+    "entry_id": "hyw-1415",
+    "starting_scenario_id": "individual",
+    "opening_id": "quay-contact-decision-v1",
+    "character": {
+      "kind": "new",
+      "name": "Synthetic G10 Courier",
+      "species": "human",
+      "background": "",
+      "opening_id": "quay-contact-decision-v1"
+    },
+    "sessions": [
+      [
+        {
+          "id": "ask-worker",
+          "action": "request-dispatch-help",
+          "words": "Would you carry this dispatch?"
+        },
+        {
+          "id": "try-shortcut",
+          "action": "quay-shortcut",
+          "words": "I try the quay gate."
+        }
+      ],
+      [
+        {
+          "id": "take-passage",
+          "action": "quay-passage",
+          "words": "I take the covered passage."
+        },
+        {
+          "id": "reach-desk",
+          "action": "passage-desk",
+          "words": "I continue to the receiving desk."
+        },
+        {
+          "id": "deliver-once",
+          "action": "deliver-dispatch",
+          "words": "I hand over the entrusted dispatch."
+        },
+        {
+          "id": "deliver-again",
+          "action": "deliver-dispatch",
+          "words": "I try to deliver another dispatch."
+        }
+      ],
+      [
+        {
+          "id": "leave-desk",
+          "action": "desk-passage",
+          "words": "I return through the passage."
+        },
+        {
+          "id": "return-quay",
+          "action": "passage-quay",
+          "words": "I return to the quay."
+        },
+        {
+          "id": "ask-again",
+          "action": "request-dispatch-help",
+          "words": "Would you assist me now?"
+        },
+        {
+          "id": "look-again",
+          "action": "look-quay",
+          "words": "I look around my immediate surroundings."
+        }
+      ]
+    ],
+    "restore_probe": {
+      "id": "unaccepted-look",
+      "action": "look-quay",
+      "words": "I take another look around."
+    }
+  }
+}

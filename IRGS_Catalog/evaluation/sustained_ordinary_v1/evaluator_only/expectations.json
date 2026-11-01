@@ -1,0 +1,78 @@
+{
+  "fixture_id": "worldward-sustained-ordinary-v1",
+  "classification": "evaluator-only",
+  "marker": "PRIVATE_SUSTAINED_ORDINARY_ORACLE",
+  "rise": {
+    "rejected_requests": [
+      "accept-before-offer",
+      "second-shelter"
+    ],
+    "refusal_request": "invite-early",
+    "refusal_text": "declines to move",
+    "agreement_text": "agrees to move",
+    "early_seconds": 600,
+    "after_repair_seconds": 1800,
+    "arrival_seconds": 2700,
+    "shelter_complete_seconds": 6600,
+    "final_seconds": 64800,
+    "founder_timber": 3,
+    "oren_timber": 2,
+    "founder_grain": 9,
+    "oren_grain": 2,
+    "oren_deficit": 1,
+    "provision_interval": 21600
+  },
+  "quay": {
+    "unsuccessful_requests": [
+      "try-shortcut",
+      "deliver-again"
+    ],
+    "refusal_text": "declines to take custody",
+    "final_seconds": 280,
+    "actor_dispatch": 0,
+    "tray_dispatch": 1
+  },
+  "open_criteria": [
+    {
+      "id": "G10-SUSTAINED-DEPTH",
+      "gate_id": "A4-G10",
+      "owner": "Catalog/coordinator with Engine/App dependencies",
+      "status": "open",
+      "source": "TARGET_5_0.json A4-G10 at joined 3f174ffad14e2219c483dd5366bb56254e08a401",
+      "missing": "Independent qualification of sustained ordinary-play depth remains open: quay continuation remains within one authored dispatch scene. Passing action/session counts do not establish the original full gate."
+    },
+    {
+      "id": "G10-RISE-DEFICIT-RECOVERY",
+      "owner": "Engine/App",
+      "status": "open",
+      "source": "settlement_setup.MODEL limits; settlement_runtime.ACTIONS",
+      "missing": "Ordinary replenishment and selected recovery from the observed protected-seed provisioning deficit are not implemented in this profile.",
+      "gate_id": "A4-G04"
+    },
+    {
+      "id": "G10-QUAY-NEEDS-RECOVERY",
+      "owner": "Engine/App",
+      "status": "open",
+      "source": "solo_quay_opening.scope; scene_actions supported kinds",
+      "missing": "The personal quay scene has movement/custody/selected refusal, but no needs/recovery procedure.",
+      "gate_id": "A4-G04"
+    },
+    {
+      "id": "G10-CONTINUING-INSTITUTION",
+      "owner": "Engine/App",
+      "status": "open",
+      "source": "R00 founding offer is explicitly requested; quay worker decision is authored",
+      "missing": "Continuing institution decisions that change later choices across both contexts are not demonstrated by these bounded procedures.",
+      "gate_id": "A4-G06"
+    },
+    {
+      "id": "G10-ADOPTED-RISK-RECOVERY",
+      "owner": "Engine/Catalog/App",
+      "status": "open",
+      "source": "solo_quay_opening.scope; settlement_setup.MODEL limits",
+      "missing": "A blocked route and atomic prerequisites do not implement the adopted consequential conflict and recovery profile required by the target.",
+      "gate_id": "A4-G07"
+    }
+  ],
+  "g10_acceptance": "Two independent ordinary contexts from distinct families including non-Rise personal play; actual different constraints, evolving consequences and retained R00 regressions."
+}
