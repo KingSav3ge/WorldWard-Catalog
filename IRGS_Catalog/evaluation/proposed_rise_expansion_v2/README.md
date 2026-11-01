@@ -1,0 +1,11 @@
+# Proposed fictional Rise expansion evaluation, revision 2
+
+Status: proposed, unselected, unimplemented. This separate revision responds to the Engine owner's review of Catalog 92998f768e699496711f9ec2238584216655f6b2 against Engine ecca8094a2d2cdb8a11e018a085487288b26e88d. Revision 1 and its receipts remain unchanged; tests on the earlier SHA are not evidence for this revision. Values and institutions are fictional examples, not historical rules, universal Rise policy or adopted gameplay.
+
+The selected current R00 source admits a hard-coded shelter, reserves timber for active work, releases unconsumed material reservation on pause, and consumes at completion. R9 may defer both conflicting operations. The proposed building-place reservation is a separate, future concept; pause need not retain a material reservation. A reservation is not a transfer, so cancellation does not credit untransferred stock. One pre-existing building is no longer injected: evaluators requiring one use an explicit player-controlled, Core-valid completion prelude and material-flow lineage, subject to a future multi-project contract.
+
+The proposed council is not the current R00 steward. Issuer and jurisdiction, scoped records and receipts, the proposed single-use favorable site review, offers and grants require Engine review. No timing, review renewal schedule, conflict priority, automatic approval or implicit save migration is selected. At most one competing last-place request may be admitted; both may be deferred. Post-work disposition is unresolved. Actor instructions are distinct from evaluator-only truth; none of these files proves runtime execution, consent, provider quality or campaign availability.
+
+Required Engine decisions and unsatisfied contracts are recorded in the profile's unresolved_choices. App must wait for Engine and Catalog to agree on exact selected commits and actor-safe DTOs. These are synthetic acceptance expectations, not actual Core receipts or completed multi-session play; no 5.0 gate is closed.
+
+Coordinator checks for this exact commit: `python -B -m unittest tools.tests.test_proposed_rise_expansion_v2_contract -v` and `python -B IRGS_Catalog/verify_catalog.py`. The first validates proposed file relationships, not gameplay; both must be freshly executed after this revision.

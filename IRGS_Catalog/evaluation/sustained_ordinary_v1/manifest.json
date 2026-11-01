@@ -1,0 +1,47 @@
+{
+  "fixture_id": "worldward-sustained-ordinary-v1",
+  "classification": "executable-independent-consumer",
+  "selection": {
+    "catalog_base": "a18cb48928da25d40d057a182c69f71ef149ce80",
+    "catalog_candidate": "command-line exact commit, required clean checkout",
+    "engine": "ecca8094a2d2cdb8a11e018a085487288b26e88d",
+    "app": "c04ba5524ae95316c7e826fc63085a4916d7dd67",
+    "app_engine_pin": "ecca8094a2d2cdb8a11e018a085487288b26e88d",
+    "app_catalog_pin": "a18cb48928da25d40d057a182c69f71ef149ce80",
+    "catalog_override": true,
+    "engine_override": false
+  },
+  "contexts": {
+    "rise": {
+      "campaign_profile": "rise",
+      "template_id": "R00",
+      "source": "IRGS_3_3/runtime/settlement_setup.py",
+      "genre_id": "settlement"
+    },
+    "quay": {
+      "campaign_profile": "military",
+      "scenario_id": "hundred-years-war",
+      "entry_id": "hyw-1415",
+      "starting_scenario_id": "individual",
+      "opening_id": "quay-contact-decision-v1",
+      "source": "IRGS_3_3/runtime/scene_setup.py",
+      "genre_id": "military",
+      "profile_manifest": "IRGS_3_3/data/catalog.json"
+    }
+  },
+  "execution_scope": "Normal reviewed creation and actor-facing intents over actual local HTTP; three separate server processes per journey. Evaluator reads synthetic saves but never changes their state.",
+  "gate_policy": "Retain ALPHA_4_0_PLAN.md A4-G10 and all seven acceptance journeys, alongside ALPHA_4_0_ACCEPTANCE.json A4-G10 at joined 3f174ffad14e2219c483dd5366bb56254e08a401. Record concrete continuing-recovery/agency/risk gaps under their own gates; do not make the unselected allowance/council a release minimum. --require-g10 remains held.",
+  "files_sha256": {
+    "README.md": "c5a39d68e41fb58481b4c9f84a1c8e89d031ed308ce932c7dd77448baab1cc9f",
+    "actor_inputs/cases.json": "5505ab2d99964ef117f5006b2e618dd7ef44e2e0f735c88c59457c19859b9aea",
+    "evaluator_only/expectations.json": "42fde6e23f59fba7c97d7bb2649f7b3809102e8b81f604f8b3230826898f7a6f"
+  },
+  "source_admission": {
+    "default_mode": "historical-baseline-override",
+    "compatible_mode": "All three full immutable SHAs supplied at invocation; exact clean roots; actual App Engine/Catalog commit gitlinks must match. No overrides.",
+    "actual_execution_identity": "Written to external evidence only; the authored selection above is provenance, not a claim of final-source compatibility.",
+    "import_roots": "Checked and recorded for server and evaluator modules; no PYTHONPATH replacement.",
+    "original_failed_consumer": "932bf5007386c8d5fe67cf6f7bb1ab3356025153",
+    "timing_correction_preserved": "e94a91a941b43f33ea02881af87261b13211d42f"
+  }
+}

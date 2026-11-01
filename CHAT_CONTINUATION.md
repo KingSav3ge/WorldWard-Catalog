@@ -1,5 +1,9 @@
 # Continue WorldWard-Catalog
 
+## Finite convergence checkpoint - 1 November 2026
+
+Stop new feature and proposal work. [Catalog convergence](CATALOG_CONVERGENCE_20261101.md) combines the present unselected design proposals and corrected sustained consumers, with exact compatible-source test admission. Fresh coordinator checks and acceptance are required before the sole Catalog owner ordinarily advances this repository's main. Joined integration/publication remains coordinator-owned; no Alpha gate is closed.
+
 Current edition: **3.4.8 Pre-Alpha**; previous_version: **3.3.3**.
 Next unified main publication: **3.4.9**. Functional Alpha 4.0 remains unqualified.
 

@@ -1,0 +1,92 @@
+{
+  "schema": "worldward-proposed-rise-expansion-actors-1",
+  "classification": "synthetic-actor-instructions",
+  "profile_id": "fictional-reed-building-allowance-v1",
+  "cases": [
+    {
+      "id": "limit",
+      "goal": "At the camp, plan and start one permitted new building, then try to start another.",
+      "actions": [
+        "start-building-A",
+        "start-building-B"
+      ]
+    },
+    {
+      "id": "concurrency",
+      "goal": "Arrange for two separately identified new-building requests to compete for the remaining place.",
+      "actions": [
+        "prepare-A",
+        "prepare-B",
+        "commit-A-and-B"
+      ]
+    },
+    {
+      "id": "pause-complete",
+      "goal": "Start a building, pause and resume it, then complete it.",
+      "actions": [
+        "start-A",
+        "pause-A",
+        "resume-A",
+        "complete-A"
+      ]
+    },
+    {
+      "id": "cancel",
+      "goal": "Start a building and cancel before work begins, then try a replacement.",
+      "actions": [
+        "start-A",
+        "cancel-A-before-work",
+        "start-B"
+      ]
+    },
+    {
+      "id": "refusal",
+      "goal": "Request an expansion and inspect the decision.",
+      "actions": [
+        "request-expansion",
+        "inspect-decision"
+      ]
+    },
+    {
+      "id": "valid-expansion",
+      "goal": "Request an expansion, review the offered terms, accept them and attempt another building.",
+      "actions": [
+        "request-expansion",
+        "review-offer",
+        "accept-offer",
+        "start-B"
+      ]
+    },
+    {
+      "id": "invalid-issuer",
+      "goal": "Ask the available claimant for permission and inspect the outcome.",
+      "actions": [
+        "request-from-claimant",
+        "inspect-decision"
+      ]
+    },
+    {
+      "id": "recovery",
+      "goal": "After accepting an expansion, retry the original request, reload, and try it across a restored boundary.",
+      "actions": [
+        "request-expansion",
+        "accept-offer",
+        "retry-original",
+        "reload",
+        "retry-original",
+        "restore",
+        "retry-original"
+      ]
+    },
+    {
+      "id": "retained-works",
+      "goal": "Start work on a new building, cancel the project, and try another building.",
+      "actions": [
+        "start-A",
+        "begin-work",
+        "cancel-A",
+        "start-B"
+      ]
+    }
+  ]
+}

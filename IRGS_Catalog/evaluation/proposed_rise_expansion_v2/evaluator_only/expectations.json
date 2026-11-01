@@ -1,0 +1,91 @@
+{
+  "schema": "worldward-proposed-rise-expansion-evaluator-2",
+  "classification": "evaluator-only",
+  "marker": "PRIVATE_RISE_EXPANSION_ORACLE_V2",
+  "profile_id": "fictional-reed-building-allowance-v2",
+  "fixtures": {
+    "limit": {
+      "setup": "one completed building from an explicitly played Core-valid project with material-flow lineage; 6 timber after consumption; allowance 2; proposed distinct-project contract available",
+      "assertions": [
+        "A reserves the last place and 3 available timber without transferring or consuming it",
+        "B is rejected; no additional stock, place or material commitment, or elapsed work change"
+      ]
+    },
+    "concurrency": {
+      "setup": "one completed building from an explicitly played Core-valid project with material-flow lineage; 6 timber after consumption; allowance 2; proposed distinct-project contract available; two same-revision attempts",
+      "assertions": [
+        "at most one distinct project is immediately admitted; both may be deferred",
+        "if both are deferred, neither obtains a place or material reservation and stock is unchanged",
+        "if one is admitted, exactly one place and at most 3 unconsumed timber are reserved; stock is unchanged",
+        "any later authorized resolution or retry must revalidate state; no winner or priority is presumed"
+      ]
+    },
+    "pause-complete": {
+      "setup": "one completed building from an explicitly played Core-valid project with material-flow lineage; 6 timber after consumption; allowance 2; proposed distinct-project contract available",
+      "assertions": [
+        "active work reserves 3 timber without stock debit",
+        "pause retains the building place and releases the material reservation without stock credit",
+        "resume rechecks material and authority; completion consumes 3 timber once and converts the place reservation into one lineage-linked building"
+      ]
+    },
+    "cancel": {
+      "setup": "one completed building from an explicitly played Core-valid project with material-flow lineage; 6 timber after consumption; allowance 2; proposed distinct-project contract available",
+      "assertions": [
+        "before-work cancellation releases the building place and the material reservation without crediting stock",
+        "a repeated cancellation cannot credit stock or release another place",
+        "replacement may reserve the freed place after revalidation"
+      ]
+    },
+    "refusal": {
+      "setup": "a legitimately recorded fictional council and site; unfavorable site review; allowance 2; proposed authority contract available",
+      "assertions": [
+        "record refusal; allowance stays 2",
+        "request and refusal change no stock, commitments or elapsed work"
+      ]
+    },
+    "valid-expansion": {
+      "setup": "a legitimately recorded fictional council and site; one favorable unused site review; usage 2; allowance 2; proposed authority contract available",
+      "assertions": [
+        "an offered term leaves allowance at 2",
+        "separate accepted, valid offer raises allowance to 3 once and consumes review eligibility",
+        "next feasible building may reserve the new place"
+      ]
+    },
+    "invalid-issuer": {
+      "setup": "claimant lacks jurisdiction for this site; allowance 2; proposed authority contract available",
+      "assertions": [
+        "no valid offer or grant; allowance unchanged",
+        "no invented authority, stock transfer, time or commitment"
+      ]
+    },
+    "recovery": {
+      "setup": "valid favorable unused review and issuer; initial allowance 2; proposed authority contract available",
+      "assertions": [
+        "accepted expansion raises allowance to 3 once",
+        "same request returns original actor-scoped receipt after reload without another increase or consumption",
+        "restore behavior is fenced according to the future reviewed Engine contract"
+      ]
+    },
+    "retained-works": {
+      "setup": "one completed building from an explicitly played Core-valid project with material-flow lineage; 6 timber after consumption; allowance 2; proposed distinct-project contract available",
+      "assertions": [
+        "after-work cancellation retains physical works and occupied place under this proposal",
+        "release of unconsumed material reservation is not a stock credit; consumed timber is never credited twice",
+        "a new building is not admitted into the occupied place without a separately reviewed disposition"
+      ]
+    },
+    "review-reuse": {
+      "setup": "one expansion was accepted, and its favorable review eligibility consumed; same site and issuer",
+      "assertions": [
+        "the consumed review cannot authorize another offer or grant",
+        "a newly recorded favorable review is required for further proposed consideration",
+        "no second increase occurs from a retry or duplicate acceptance"
+      ]
+    }
+  },
+  "limitations": [
+    "Proposed expectations only; no Core execution, NPC behavior, permission, save migration or campaign availability is verified.",
+    "Setup values, refusal cause and site review are evaluator truth; they are not supplied as actor instructions.",
+    "No immediate winner, priority, expiry duration, migration or post-work disposition is selected."
+  ]
+}
