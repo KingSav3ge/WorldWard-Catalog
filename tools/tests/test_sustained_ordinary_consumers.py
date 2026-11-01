@@ -135,6 +135,7 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.child = None
         self.log = None
         self.results = []
+        self.evaluator_time_trace = []
         self.addCleanup(self.stop)
         self.start()
 
@@ -279,14 +280,62 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.assertEqual(result['presentation']['source_ref'], event)
         self.assertEqual(result['presentation']['render_usage'], {'provider_calls': 0, 'model_tokens': 0})
 
+    def check_evaluator_time(self, request, action, before, after, public, *, rejected=False):
+        """Check fixture time from Core state; never fill an actor receipt field."""
+        left, right = before['elapsed_time'], after['elapsed_time']
+        self.assertEqual(left['axis'], right['axis'])
+        self.assertIs(type(left['seconds']), int)
+        self.assertIs(type(right['seconds']), int)
+        delta = right['seconds'] - left['seconds']
+        self.assertGreaterEqual(delta, 0)
+        self.assertEqual(after['campaign_time'], before['campaign_time'])
+        if rejected:
+            self.assertEqual(delta, 0)
+        elif before['binding']['campaign_profile'] == 'rise':
+            # The inspected shared settlement adapter supplies no action span.
+            # Null is retained; it does not imply that the Core advanced by zero.
+            self.assertIsNone(public['elapsed_time'])
+            if action['action'] == 'wait_hour':
+                model = before['settlement_model']
+                candidates = [left['seconds'] + 3600, before['provision']['next_at']]
+                candidates.extend(left['seconds'] + p['duration'] - p['worked']
+                    for p in before['projects'].values() if p['status'] == 'active')
+                candidates.extend(m['arrive_at'] for m in before['migrations'].values()
+                                  if m['status'] == 'transit')
+                self.assertLessEqual(3600, model['max_advance_seconds'])
+                self.assertEqual(right['seconds'], min(candidates))
+                self.assertGreater(delta, 0)
+            elif action['action'] in ('walk_clearing', 'walk_commons'):
+                self.assertEqual(delta, before['settlement_model']['travel_seconds'])
+            else:
+                self.assertEqual(delta, 0)
+        else:
+            duration = before['scene_rules']['actions'][action['action']]['duration_seconds']
+            self.assertEqual(delta, duration)
+            packet = public['elapsed_time']
+            self.assertIsInstance(packet, dict)
+            self.assertEqual(packet['axis'], left['axis'])
+            self.assertEqual(packet['before_seconds'], left['seconds'])
+            self.assertEqual(packet['after_seconds'], right['seconds'])
+            self.assertEqual(packet['seconds'], delta)
+        self.evaluator_time_trace.append({
+            'classification': 'evaluator-only', 'request_id': request['request_id'],
+            'action': action['action'], 'rejected_no_effects': rejected,
+            'axis': left['axis'], 'before_seconds': left['seconds'], 'after_seconds': right['seconds'],
+            'actual_delta_seconds': delta, 'public_elapsed_field_present': 'elapsed_time' in public,
+            'public_elapsed_time': copy.deepcopy(public.get('elapsed_time')),
+            'public_value_changed_by_consumer': False})
+
     def act(self, key, actor, action, *, reject=False, discard_body=False):
         request = self.prepare(key, actor, action)
         before = self.save_path(key).read_bytes()
+        before_state = json.loads(before)['state']
         code, result = self.http('/api/intent/execute', {**request, 'explicitly_accepted': True},
                                  discard_body=discard_body)
         if reject:
             self.assertEqual(code, 400, result)
             self.assertEqual(self.save_path(key).read_bytes(), before)
+            self.check_evaluator_time(request, action, before_state, self.state(key), result, rejected=True)
             return request, result
         self.assertEqual(code, 200, result)
         # The evaluator reads the actual durable record; it does not write it.
@@ -294,6 +343,7 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         if not discard_body:
             self.assertEqual(result, saved)
         self.assertEqual(saved['declaration'], action['words'])
+        self.check_evaluator_time(request, action, before_state, self.state(key), saved)
         self.check_receipt(key, actor, saved)
         self.results.append((request, saved))
         return request, saved
@@ -321,6 +371,13 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.assertEqual(self.http('/api/intent/execute', {**request, 'explicitly_accepted': True})[0], 400)
         self.assertEqual(self.save_path(key).read_bytes(), before)
         self.recover_all(key, actor)
+        # Re-review the same voluntary inspection under a new request identity.
+        # Actual further play after restore must not reseed or reset the world.
+        fresh = {**probe, 'id': 'after-restore-' + probe['id']}
+        _, result = self.act(key, actor, fresh)
+        self.assertEqual(self.state(key)['stocks'], json.loads(before)['state']['stocks'])
+        self.recover_all(key, actor)
+        return result
 
     def evidence(self, context, **observed):
         provider_calls = int((self.folder / 'blocked-provider-calls.json').read_text())
@@ -335,6 +392,9 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
             'separate_server_processes': True, 'normal_reviewed_creation': True,
             'hidden_state_written_by_harness': False, 'provider_calls': provider_calls,
             'exact_original_retry': True, 'unaccepted_restore_fenced': True,
+            'further_normal_play_after_restore': True,
+            'evaluator_time_trace': self.evaluator_time_trace,
+            'receipt_time_policy': 'Actor elapsed_time null is preserved; evaluator Core time is separate.',
             'receipt_matching': 'actor-scoped committed literal compared with actual local presentation',
             'semantic_quality_verified': False, 'live_provider_quality_verified': False,
             'discarded_response': 'One accepted response body was deliberately not read; recovered from durable result.',
@@ -405,13 +465,49 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
                 self.assertEqual(state['assets']['shelter']['project'], 'shelter')
                 self.assertEqual(state['material_flows']['project:shelter']['quantity'], 3)
         continuation = self.inputs['rise']['continuation']
-        elapsed = expected['shelter_complete_seconds']
+        # Fixed actor instructions are unchanged. Only the evaluator's stopping
+        # check reads cumulative synthetic Core time; it is never returned as a DTO.
+        selected = self.state(key)
+        model = selected['settlement_model']
+        self.assertEqual(model['provision_interval_seconds'], expected['provision_interval'])
+        elapsed = selected['elapsed_time']['seconds']
+        self.assertEqual(elapsed, expected['shelter_complete_seconds'])
+        self.assertEqual(continuation['until_elapsed_seconds'] % model['provision_interval_seconds'], 0)
         for index in range(continuation['maximum_requests']):
             if elapsed >= continuation['until_elapsed_seconds']:
                 break
+            before = self.state(key)
+            next_at = before['provision']['next_at']
             _, result = self.act(key, actor, {'id': 'provision-wait-' + str(index),
                 'action': continuation['action'], 'words': continuation['words']})
-            elapsed = result['elapsed_time']['after_seconds']
+            after = self.state(key)
+            elapsed = after['elapsed_time']['seconds']
+            self.assertEqual(elapsed, min(before['elapsed_time']['seconds'] + 3600, next_at))
+            if elapsed == next_at:
+                self.assertEqual(after['provision']['next_at'], next_at + model['provision_interval_seconds'])
+                for household, members in before['households'].items():
+                    key_at = str(next_at) + ':' + household
+                    assessment = after['provision']['assessments'][key_at]
+                    demand = len(members['members']) * model['grain_per_person']
+                    debit = before['stocks'][household]['grain'] - after['stocks'][household]['grain']
+                    self.assertEqual(assessment['at'], next_at)
+                    self.assertEqual(assessment['demand'], demand)
+                    self.assertEqual(debit, assessment['delivered'])
+                    self.assertGreaterEqual(debit, 0)
+                    self.assertLessEqual(debit, max(0, before['stocks'][household]['grain'] - members['seed_reserve']))
+                    self.assertEqual(assessment['deficit'] + debit, demand)
+                    flow_id = 'provision:' + key_at
+                    if debit:
+                        flow = after['material_flows'][flow_id]
+                        self.assertEqual(flow['kind'], 'consumption')
+                        self.assertEqual(flow['quantity'], debit)
+                        self.assertEqual(flow['elapsed_seconds'], next_at)
+                    else:
+                        self.assertNotIn(flow_id, after['material_flows'])
+            else:
+                self.assertEqual(after['provision']['next_at'], next_at)
+                self.assertEqual(after['provision']['assessments'], before['provision']['assessments'])
+                self.assertEqual(after['stocks'], before['stocks'])
         self.assertEqual(elapsed, continuation['until_elapsed_seconds'])
         state = self.state(key)
         self.assertEqual(state['elapsed_time']['seconds'], expected['final_seconds'])
@@ -425,7 +521,11 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.assertIn(expected['refusal_text'], early['outcome']['summary'].lower())
         self.recover_all(key, actor)
         self.restore_fence(key, actor, self.inputs['rise']['restore_probe'])
-        self.evidence('rise', elapsed_seconds=state['elapsed_time']['seconds'],
+        restored = self.state(key)
+        self.assertEqual(restored['elapsed_time']['seconds'], state['elapsed_time']['seconds'])
+        self.assertEqual(restored['campaign_time'], initial_calendar)
+        self.evidence('rise', elapsed_seconds_before_restore=state['elapsed_time']['seconds'],
+            post_restore_elapsed_seconds=restored['elapsed_time']['seconds'],
             founder_grain=expected['founder_grain'], oren_grain=expected['oren_grain'],
             observed_provision_deficit=assessment['deficit'], health_recovery_implemented=False,
             permission_attempt_rejected=True, duplicate_physical_project_rejected=True,
@@ -458,7 +558,13 @@ class SustainedOrdinaryConsumers(unittest.TestCase):
         self.assertEqual(state['campaign_time'], initial_calendar)
         self.recover_all(key, actor)
         self.restore_fence(key, actor, self.inputs['quay']['restore_probe'])
-        self.evidence('quay', elapsed_seconds=state['elapsed_time']['seconds'],
+        restored = self.state(key)
+        probe_action = self.inputs['quay']['restore_probe']['action']
+        probe_seconds = state['scene_rules']['actions'][probe_action]['duration_seconds']
+        self.assertEqual(restored['elapsed_time']['seconds'], state['elapsed_time']['seconds'] + probe_seconds)
+        self.assertEqual(restored['campaign_time'], initial_calendar)
+        self.evidence('quay', elapsed_seconds_before_restore=state['elapsed_time']['seconds'],
+            post_restore_elapsed_seconds=restored['elapsed_time']['seconds'],
             dispatch_actor=expected['actor_dispatch'], dispatch_tray=expected['tray_dispatch'],
             real_unsuccessful_attempts=expected['unsuccessful_requests'],
             authored_worker_refusal=True, post_delivery_return_to_quay=True,
@@ -483,21 +589,28 @@ def main():
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(SustainedOrdinaryConsumers)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     oracle = json.loads((FIXTURE / 'evaluator_only/expectations.json').read_text(encoding='utf-8'))
+    runtime_passed = (result.wasSuccessful() and result.testsRun == 2 and not result.skipped
+                      and set(REPORTS) == {'rise', 'quay'})
+    gate_status = 'held' if runtime_passed else 'blocked_by_runtime_failure'
     report = {'fixture_id': oracle['fixture_id'], 'source': SOURCE_SELECTION,
         'runtime_tests': {'run': result.testsRun, 'failures': len(result.failures),
                           'errors': len(result.errors), 'skipped': len(result.skipped),
-                          'successful': result.wasSuccessful(),
+                          'successful': runtime_passed,
                           'failure_details': [text for _, text in result.failures + result.errors]},
         'contexts': REPORTS, 'g10_original_acceptance': oracle['g10_acceptance'],
+        'g10_plan_acceptance': oracle['g10_plan_acceptance'],
+        'requirements_source': oracle['requirements_source'],
+        'original_acceptance_journeys': oracle['acceptance_journeys'],
+        'unselected_expansion_policy_required_by_this_consumer': False,
         'required_open_criteria': oracle['open_criteria'],
         'g10_qualified': False, 'live_provider_quality_verified': False,
-        'semantic_quality_verified': False, 'gate_status': 'held',
+        'semantic_quality_verified': False, 'gate_status': gate_status,
         'explanation': 'Original G10 sustained-depth qualification remains open; related G04/G06/G07 gaps retain their own gate IDs.'}
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({'report': str(output), 'runtime_tests_successful': result.wasSuccessful(),
-                      'g10_gate': 'held', 'required_open_criteria': [row['id'] for row in oracle['open_criteria']]}))
-    if not result.wasSuccessful():
+    print(json.dumps({'report': str(output), 'runtime_tests_successful': runtime_passed,
+                      'g10_gate': gate_status, 'required_open_criteria': [row['id'] for row in oracle['open_criteria']]}))
+    if not runtime_passed:
         return 1
     return 2 if args.require_g10 else 0
 

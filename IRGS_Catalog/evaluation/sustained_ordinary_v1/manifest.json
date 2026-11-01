@@ -30,10 +30,10 @@
     }
   },
   "execution_scope": "Normal reviewed creation and actor-facing intents over actual local HTTP; three separate server processes per journey. Evaluator reads synthetic saves but never changes their state.",
-  "gate_policy": "Preserve original A4-G10 acceptance. Passing bounded consumers are evidence only; independent sustained-depth qualification remains open. Related G04/G06/G07 gaps are recorded separately. --require-g10 returns held.",
+  "gate_policy": "Retain ALPHA_4_0_PLAN.md A4-G10 and all seven acceptance journeys, alongside ALPHA_4_0_ACCEPTANCE.json A4-G10 at joined 3f174ffad14e2219c483dd5366bb56254e08a401. Record concrete continuing-recovery/agency/risk gaps under their own gates; do not make the unselected allowance/council a release minimum. --require-g10 remains held.",
   "files_sha256": {
-    "README.md": "3080b178764df175fb68246a8a39f9ae72fa8994f53710f9656ddcbe37f78e13",
+    "README.md": "23842da8e23cb14b4453a6b6b3767c423b6338c971d8669045f5c3f9360d6ae1",
     "actor_inputs/cases.json": "5505ab2d99964ef117f5006b2e618dd7ef44e2e0f735c88c59457c19859b9aea",
-    "evaluator_only/expectations.json": "b8ad2aedf3d6f27b852f6aaf136c5e55a989d2b577b185a43f064d04d6228f9a"
+    "evaluator_only/expectations.json": "42fde6e23f59fba7c97d7bb2649f7b3809102e8b81f604f8b3230826898f7a6f"
   }
 }

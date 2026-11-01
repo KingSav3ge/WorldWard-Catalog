@@ -38,8 +38,8 @@
       "gate_id": "A4-G10",
       "owner": "Catalog/coordinator with Engine/App dependencies",
       "status": "open",
-      "source": "TARGET_5_0.json A4-G10 at joined 3f174ffad14e2219c483dd5366bb56254e08a401",
-      "missing": "Independent qualification of sustained ordinary-play depth remains open: quay continuation remains within one authored dispatch scene. Passing action/session counts do not establish the original full gate."
+      "source": "ALPHA_4_0_PLAN.md A4-G10 and Acceptance journeys 1-7; ALPHA_4_0_ACCEPTANCE.json A4-G10, at 3f174ffad14e2219c483dd5366bb56254e08a401",
+      "missing": "Sustained shared-system decisions and recovery remain incompletely implemented in the selected contexts: ordinary scarcity recovery, continuing NPC/institution commitments and adopted risk/recovery need further evidence. The original seven journeys apply; neither scene counts nor passing bounded consumers lower the gate."
     },
     {
       "id": "G10-RISE-DEFICIT-RECOVERY",
@@ -74,5 +74,56 @@
       "gate_id": "A4-G07"
     }
   ],
-  "g10_acceptance": "Two independent ordinary contexts from distinct families including non-Rise personal play; actual different constraints, evolving consequences and retained R00 regressions."
+  "g10_acceptance": "Two independent ordinary contexts from distinct families including non-Rise personal play; actual different constraints, evolving consequences and retained R00 regressions.",
+  "g10_plan_acceptance": "The two ordinary Alpha contexts sustain evolving multi-session decisions through the shared systems; independent consumers check failure and recovery as well as happy paths. R00 and existing supported starts retain their actual guarantees.",
+  "requirements_source": {
+    "repository": "KingSav3ge/WorldWard",
+    "commit": "3f174ffad14e2219c483dd5366bb56254e08a401",
+    "plan": "ALPHA_4_0_PLAN.md",
+    "acceptance": "ALPHA_4_0_ACCEPTANCE.json",
+    "gate": "A4-G10"
+  },
+  "acceptance_journeys": [
+    {
+      "step": 1,
+      "requirement": "Clean normal start and review with no test-only operator injecting state.",
+      "coverage": "implemented bounded consumer; requires fresh exact-commit execution"
+    },
+    {
+      "step": 2,
+      "requirement": "Consecutive perception/movement, interaction and material decisions whose later options depend on prior committed consequences.",
+      "coverage": "bounded permission, work/provisioning and dispatch consequences; sustained depth remains partial"
+    },
+    {
+      "step": 3,
+      "requirement": "A refusal, unsupported attempt or failed prerequisite that preserves intent and has no invented effects; followed by a legitimate alternate decision.",
+      "coverage": "implemented supported refusal/failure and alternate actor choices; requires fresh execution"
+    },
+    {
+      "step": 4,
+      "requirement": "NPC/institution reaction, an obligation or resource conflict, and supported time-dependent work or recovery that changes a later decision.",
+      "coverage": "authored NPC reactions and finite work/provisioning are bounded; continuing institution decisions and deficit recovery remain open"
+    },
+    {
+      "step": 5,
+      "requirement": "The selected risk/conflict path and its recovery wherever that profile applies.",
+      "coverage": "open; blocked route and failed prerequisites do not substitute for the required adopted risk/recovery procedure"
+    },
+    {
+      "step": 6,
+      "requirement": "Close/restart, save/continue, duplicate or lost-reply retry and a restore branch, then further play proving the world was not reset.",
+      "coverage": "implemented three-process continuation, original results, restore fencing and a freshly reviewed normal inspection after restore; requires fresh execution"
+    },
+    {
+      "step": 7,
+      "requirement": "A separate bounded live-provider journey plus offline/provider-failure paths. UI text, effects, knowledge, requests and accounting must agree.",
+      "coverage": "separate required provider qualification remains open under A4-G08; these local consumers make no provider calls and carry no paid authorization"
+    }
+  ],
+  "expansion_scope": "The user's finite Rise building-limit requirement remains separately tracked. The unselected demonstration allowance, council and numerical policy are not imported as release-minimum criteria by this consumer.",
+  "time_contract": {
+    "public": "Preserve actual shared-intent elapsed_time, including null; it does not encode zero or an invented action span.",
+    "evaluator": "Read cumulative elapsed_time.seconds and its selected axis from the temporary committed Core state. Check positive wait/movement deltas, zero-effect actions, material flows and selected provision boundaries separately.",
+    "civil": "Do not infer civil time from elapsed work, causal sequence or storage revision."
+  }
 }
