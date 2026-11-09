@@ -1,5 +1,16 @@
 # Continue WorldWard-Catalog
 
+## Catalog writing direction — 9 November 2026
+
+The current published edition remains **3.4.9 Pre-Alpha**. The next content
+candidate adds an optional, separately versioned response depot v2 (1,104 stored variants)
+and the planned **SS-17 Pressure Falling** fictional opening. Existing depot v1,
+source fixtures, campaign launch gates and original archive records stay intact.
+Engine/App adoption, campaign initialization and functional Alpha qualification
+are not claimed. Follow-up: run Catalog refresh/integrity and relevant response
+and campaign tests in a working Python 3.12+ environment; then qualify any
+joined selection through its actual component pins. No provider call is needed.
+
 ## Finite convergence checkpoint - 1 November 2026
 
 Stop new feature and proposal work. [Catalog convergence](CATALOG_CONVERGENCE_20261101.md) combines the present unselected design proposals and corrected sustained consumers, with exact compatible-source test admission. Fresh coordinator checks and acceptance are required before the sole Catalog owner ordinarily advances this repository's main. Joined integration/publication remains coordinator-owned; no Alpha gate is closed.

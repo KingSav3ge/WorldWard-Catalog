@@ -1,5 +1,16 @@
 # WorldWard-Catalog development
 
+## Catalog writing direction — 9 November 2026
+
+The current published edition remains **3.4.9 Pre-Alpha**. The next content
+candidate adds an optional, separately versioned response depot v2 (1,104 stored variants)
+and the planned **SS-17 Pressure Falling** fictional opening. Existing depot v1,
+source fixtures, campaign launch gates and original archive records stay intact.
+Engine/App adoption, campaign initialization and functional Alpha qualification
+are not claimed. Follow-up: run Catalog refresh/integrity and relevant response
+and campaign tests in a working Python 3.12+ environment; then qualify any
+joined selection through its actual component pins. No provider call is needed.
+
 Current edition: **3.4.8 Pre-Alpha**; previous_version: **3.3.3**.
 Next unified main publication: **3.4.9**. Functional Alpha 4.0 remains unqualified.
 
