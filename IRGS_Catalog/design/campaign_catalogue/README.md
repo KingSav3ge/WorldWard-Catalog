@@ -35,3 +35,11 @@ Before any full concept can release, its project must pass the supplied eight ph
 The user selected the v0.5 package as the update to all 44 existing concepts. Active preview data now adapts its expanded synopses, perspectives, experiences, systems, scope, risks and acceptance checks. Exact supplied JSON records, Markdown briefs, schema and decision notes remain under `../catalogue_v0_5/`; the original ZIP remains under `../source_packages/`. The original v0.4 specification above remains unchanged. `../CATALOGUE_V0_5_IMPORT.json` records hashes and reconciliation.
 
 The imported package predates current Kira canon adoption and Rise availability. Its default-disabled publication and older implementation notes do not revoke prior user decisions. Active previews preserve current approved publication, Kira v0.5 canon, Rise display naming, verified Century/R00 access and independent release gating. Source Core section references are design references, not runtime certification.
+
+## Original short-story writing — 9 November 2026
+
+[Pressure Falling: Transfer Ring opening](../../content/short_stories/SS-17-pressure-falling-v1.md)
+develops the existing planned SS-17 concept with a fictional station, three
+viewpoints, character dialogue and conditional continuation lines. It is an
+authored proposal for later review and initialization. It does not establish
+start availability, Engine actions, NPC consent or campaign release approval.
