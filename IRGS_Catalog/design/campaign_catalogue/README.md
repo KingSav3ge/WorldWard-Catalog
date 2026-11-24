@@ -24,6 +24,10 @@ The document's older statement that Century alone is playable was reconciled wit
 
 Kira v0.5 was separately, explicitly adopted by the user as working canon. Its lorebook and dossier supersede older creative documents; existing saves retain their actual history. Catalogue copy remains working promotional description, and cannot replace that adopted foundation or select Kieran as the player.
 
+## Campaign writing drafts
+
+The [SCP Foundation campaign collection](../campaign_drafts/scp_foundation_v1/README.md) includes three original scenarios for review. It lives in the authoring drafts outside the approved discovery portfolio.
+
 ## App behavior
 
 The library provides type, setting, period, genre, launch/future/system and availability filters. Text search includes titles, places, periods, roles, synopses and featured systems. Filters combine, preserve a zero-result state and reset accessibly. All previews and guide searches are read-only and escape supplied text. No remote image is loaded; covers are typographic placeholders.
