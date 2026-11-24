@@ -10,6 +10,8 @@ Three unofficial WorldWard campaign drafts set in the fictional Alder Quay distr
 
 Each campaign starts a separate story. Site Kestrel can feature in several campaigns, with a fresh starting situation and its own later history in each. Choose one role for a playthrough. The other people keep their own responsibilities and choices.
 
+The [character creation draft](character-creation.md) shows the proposed personnel and anomaly menus and the Form your Anomaly page.
+
 The linked pages are written openings. Each lets you read from one perspective and pick or write an intention. They are a Catalog concept draft awaiting WorldWard playtest support.
 
 The Foundation setting and role terminology come from the SCP Wiki. The district, site, people, anomalies and scenes were created for this collection. [Credits and license](ATTRIBUTION.md)

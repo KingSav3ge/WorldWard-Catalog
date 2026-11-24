@@ -29,4 +29,6 @@ After a committed choice, the next exchange can stay small. If the keeper receiv
 
 The first human and anomaly playtests should prove different lived constraints. For the supervised start, demonstrate an approved visit or refused route, an authorized alternative, and the saved custody record. For Sable, demonstrate a valid local sound and a refused remote attempt with no extra sound. For the Bell, demonstrate a valid signal, a real response or explicit absence of one, and a resumed location after a permitted or refused move. Retrying after interruption must preserve the previous result and avoid repeating sound or travel.
 
+The [character creation draft](../character-creation.md) defines the proposed menu paths and custom anomaly review. The first custom start needs a validated body, senses, supported abilities and an eligible starting situation. A name or class assignment alone cannot fill any of those fields.
+
 Engine owns travel, needs, access and custody scopes, permissions, character decisions, and the proposed embodiment, perception and signal rules. App owns selection, capabilities in the reviewed action flow, role-appropriate information and recovery. Catalog owns the authored choices and independent expected consequences. Evaluate the human and anomaly starts against exact selected sources before offering a launch.

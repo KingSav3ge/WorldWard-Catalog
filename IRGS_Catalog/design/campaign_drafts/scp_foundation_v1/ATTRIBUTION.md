@@ -9,6 +9,7 @@ The campaign materials in this directory are shared under [Creative Commons Attr
 | [SCP Foundation Wiki](https://scp-wiki.wikidot.com/) | The Foundation as an organization and the Secure, Contain, Protect setting |
 | [Mobile Task Forces](https://scp-wiki.wikidot.com/task-forces) | The general Mobile Task Force role |
 | [Security Clearance Levels](https://scp-wiki.wikidot.com/security-clearance-levels) | General Foundation personnel and Class D terminology |
+| [Object Classes](https://scp-wiki.wikidot.com/object-classes) | Containment class terminology for the anomaly roster |
 | [SCP Wiki Licensing Guide](https://scp-wiki.wikidot.com/licensing-guide) | Attribution and ShareAlike guidance |
 
 This notice describes the campaign materials here. Any later game distribution needs attribution visible to players and a separate review of the bundled materials and software.
