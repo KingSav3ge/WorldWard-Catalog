@@ -12,4 +12,6 @@ The campaign materials in this directory are shared under [Creative Commons Attr
 | [Object Classes](https://scp-wiki.wikidot.com/object-classes) | Containment class terminology for the anomaly roster |
 | [SCP Wiki Licensing Guide](https://scp-wiki.wikidot.com/licensing-guide) | Attribution and ShareAlike guidance |
 
+The [SCP Wiki source guide](source-guide.md) credits the four hubs used for research and distinguishes the original samples from any future page or asset adaptation.
+
 This notice describes the campaign materials here. Any later game distribution needs attribution visible to players and a separate review of the bundled materials and software.

@@ -14,4 +14,6 @@ The [character creation draft](character-creation.md) shows the proposed personn
 
 The linked pages are written openings. Each lets you read from one perspective and pick or write an intention. They are a Catalog concept draft awaiting WorldWard playtest support.
 
+The [SCP Wiki source guide](source-guide.md) brings together the four reference hubs and gives campaign authors draft examples.
+
 The Foundation setting and role terminology come from the SCP Wiki. The district, site, people, anomalies and scenes were created for this collection. [Credits and license](ATTRIBUTION.md)
