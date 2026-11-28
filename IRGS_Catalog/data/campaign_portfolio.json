@@ -1432,7 +1432,7 @@
         "Technical"
       ],
       "synopsis": [
-        "An orbital facility experiences a structural, environmental, or life-support malfunction. Crew and passengers respond through diagnostics, maintenance, emergency procedure, communication, and resource management. Station layout, technical capabilities, limited atmosphere, and component condition remain consistent throughout."
+        "An alert interrupts routine aboard a near-Earth station: a display reports falling pressure in the transfer ring, but the cause is unconfirmed. As a crew member or passenger, consider what to check, whom to ask, and what to attempt while the people around you follow their own priorities. Available information, equipment and supplies shape the options. A warning does not prove its cause, and a request for help is not consent. Repair, relocation and other outcomes remain possible rather than guaranteed."
       ],
       "perspectives": "Engineer; Technician; Medic; Security worker; Administrator; Passenger",
       "core_experiences": "Fault detection; Diagnose; Stabilize life support; Repair or relocate; Aftermath",

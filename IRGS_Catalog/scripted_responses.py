@@ -48,13 +48,17 @@ def load_library(path=DEFAULT_LIBRARY):
 
 def validate_library(library):
     keys(library, 'schema_version library_id version language source_ref rights authority families recipes')
-    depot = library['library_id'] == 'irgs-response-depot-v1'
-    require(type(library['schema_version']) is int and library['schema_version'] == (2 if depot else 1)
-            and library['library_id'] in ('irgs-routine-responses-v1', 'irgs-response-depot-v1')
-            and library['version'] == '1.0.0' and library['language'] == 'en'
-            and library['source_ref'] == ('authored:irgs-catalog:response-depot:v1' if depot
-                                        else 'authored:irgs-catalog:routine-responses:v1'),
-            'Unsupported response library identity')
+    library_id = library['library_id']
+    require(isinstance(library_id, str), 'Unsupported response library identity')
+    identities = {
+        'irgs-routine-responses-v1': (1, '1.0.0', 'authored:irgs-catalog:routine-responses:v1'),
+        'irgs-response-depot-v1': (2, '1.0.0', 'authored:irgs-catalog:response-depot:v1'),
+        'irgs-response-depot-v2': (2, '2.0.0', 'authored:irgs-catalog:response-depot:v2'),
+    }
+    depot = library_id in ('irgs-response-depot-v1', 'irgs-response-depot-v2')
+    require(type(library['schema_version']) is int and library_id in identities
+            and (library['schema_version'], library['version'], library['source_ref']) == identities[library_id]
+            and library['language'] == 'en', 'Unsupported response library identity')
     require(library['rights'] == {'authorship': 'original-authored-presentation-text',
         'permitted_use': ['local-presentation', 'synthetic-evaluation'],
         'imported_material': 'none', 'external_processing': 'host-policy-required'},
