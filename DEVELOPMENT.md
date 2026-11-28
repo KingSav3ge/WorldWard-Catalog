@@ -52,3 +52,9 @@ unavailable through the coordinator bridge. Resume the existing owner, not a
 replacement project/chat. The earlier Vercel source-copy denial remains binding:
 do not retry or route around that transfer. No external deployment is part of
 this work. DLVA is separate and receives no WorldWard files.
+
+## Campaign writing — 23 November 2026
+
+The Catalog has a proposed [SCP Foundation collection](IRGS_Catalog/design/campaign_drafts/scp_foundation_v1/README.md) with a bounded incident, a persistent site and a regional sandbox. The package includes 18 authored role starts. It has separate guidance for [Last Confirmed](IRGS_Catalog/design/campaign_drafts/scp_foundation_v1/last-confirmed/author-notes.md), [The Kestrel Watch](IRGS_Catalog/design/campaign_drafts/scp_foundation_v1/kestrel-watch/author-notes.md) and [Beyond the File](IRGS_Catalog/design/campaign_drafts/scp_foundation_v1/beyond-the-file/author-notes.md). These are concept drafts. An eventual playtest depends on supported Engine starts, scoped App selection and qualified runtime effects, including anomaly perception and communication.
+
+The [character creation draft](IRGS_Catalog/design/campaign_drafts/scp_foundation_v1/character-creation.md) maps the current SCP role openings to dependent menus and specifies a custom anomaly description and ability review. App and Engine implementation and qualification are pending.
